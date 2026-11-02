@@ -18,7 +18,7 @@ const query = `
         nodes {
           stargazerCount
           languages(first: 10, orderBy: { field: SIZE, direction: DESC }) {
-            edges { size node { name color } }
+            edges { size node { name } }
           }
         }
       }
@@ -29,7 +29,6 @@ const query = `
         }
         totalCommitContributions
         totalPullRequestContributions
-        totalIssueContributions
       }
     }
   }
@@ -65,7 +64,7 @@ const languageBytes = new Map();
 for (const repo of repos) {
   for (const edge of repo.languages.edges) {
     const name = edge.node.name;
-    const current = languageBytes.get(name) || { name, color: edge.node.color, bytes: 0 };
+    const current = languageBytes.get(name) || { name, bytes: 0 };
     current.bytes += edge.size;
     languageBytes.set(name, current);
   }
@@ -92,13 +91,19 @@ const esc = (value) =>
   })[char]);
 
 const FONT = "ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace";
-const PANEL = "#0a100e";
-const STROKE = "#1f3b32";
-const MUTED = "#6e8f82";
-const TEXT = "#e6f4ee";
-const BODY = "#b8d8ca";
-const GREEN = "#7ee787";
-const TEAL = "#56d4b0";
+const BG0 = "#0A6A7A";
+const BG1 = "#07516F";
+const BG2 = "#064957";
+const STROKE = "#1C7491";
+const MUTED = "#8FCBD6";
+const TEXT = "#F2FDFF";
+const BODY = "#D6F8FF";
+const GREEN = "#66E6A0";
+const CYAN = "#6DE8F5";
+const BLUE = "#B8EDFF";
+const YELLOW = "#FFE36E";
+const MAGENTA = "#C28CFF";
+const DIM = "#5FA8B8";
 
 const statBlocks = [
   ["CONTRIBUTIONS", fmt.format(totalContributions), "last 365 days"],
@@ -112,7 +117,7 @@ const statsMarkup = statBlocks
     const x = 28 + index * 211;
     return `<text x="${x}" y="68" fill="${MUTED}" font-size="10" letter-spacing="1.4" font-family="${FONT}">${label}</text>
     <text x="${x}" y="102" fill="${TEXT}" font-size="30" font-weight="700" font-family="${FONT}">${esc(value)}</text>
-    <text x="${x}" y="121" fill="#4f6a5f" font-size="10" font-family="${FONT}">${esc(sub)}</text>`;
+    <text x="${x}" y="121" fill="${DIM}" font-size="10" font-family="${FONT}">${esc(sub)}</text>`;
   })
   .join("\n");
 
@@ -120,21 +125,22 @@ const separators = [227, 438, 649]
   .map((x) => `<path d="M${x} 58v76" stroke="${STROKE}"/>`)
   .join("");
 
+const barColors = [CYAN, GREEN, BLUE, YELLOW, MAGENTA];
 const languageMarkup = topLanguages
   .map((language, index) => {
     const y = 198 + index * 27;
     const percent = totalLanguageBytes ? (language.bytes / totalLanguageBytes) * 100 : 0;
     const width = Math.max(2, Math.round((percent / 100) * 300));
-    const color = language.color || TEAL;
+    const color = barColors[index] || CYAN;
     return `<circle cx="31" cy="${y - 4}" r="4" fill="${color}"/>
     <text x="44" y="${y}" fill="${BODY}" font-size="11" font-family="${FONT}">${esc(language.name)}</text>
-    <rect x="140" y="${y - 9}" width="300" height="8" rx="2" fill="#16241f"/>
+    <rect x="140" y="${y - 9}" width="300" height="8" rx="2" fill="${BG2}"/>
     <rect x="140" y="${y - 9}" width="${width}" height="8" rx="2" fill="${color}" opacity="0.9"/>
     <text x="456" y="${y}" text-anchor="end" fill="${MUTED}" font-size="10" font-family="${FONT}">${percent.toFixed(1)}%</text>`;
   })
   .join("\n");
 
-const heatColors = ["#16241f", "#1f6f5c", "#2ea884", "#56d4b0", "#7ee787"];
+const heatColors = [BG2, STROKE, CYAN, GREEN, YELLOW];
 const levelFor = (count) => {
   if (count === 0) return 0;
   const ratio = count / maxDay;
@@ -160,49 +166,68 @@ const legend = heatColors
   .map((color, index) => `<rect x="${748 + index * 14}" y="282" width="9" height="9" rx="1.5" fill="${color}"/>`)
   .join("");
 
-const updated = new Date().toISOString().slice(0, 16).replace("T", " ");
+const bubbles = [
+  [820, 130, 70, 0.05],
+  [760, 330, 40, 0.06],
+  [120, 330, 55, 0.04],
+]
+  .map(([cx, cy, r, opacity]) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${BLUE}" opacity="${opacity}"/>`)
+  .join("");
+
+const updated = new Date().toISOString().slice(0, 10);
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="430" viewBox="0 0 900 430" role="img" aria-labelledby="title desc">
   <title id="title">GitHub stats for ${esc(user.login)}</title>
   <desc id="desc">Contributions, commits, public repositories, followers, top languages, and a 26 week contribution heatmap.</desc>
   <defs>
+    <linearGradient id="aero" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="${BG0}"/>
+      <stop offset="0.55" stop-color="${BG1}"/>
+      <stop offset="1" stop-color="${BG2}"/>
+    </linearGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="${TEXT}" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="${TEXT}" stop-opacity="0"/>
+    </linearGradient>
     <pattern id="scanlines" width="4" height="4" patternUnits="userSpaceOnUse">
-      <rect width="4" height="1" fill="${GREEN}" opacity="0.025"/>
+      <rect width="4" height="1" fill="${CYAN}" opacity="0.03"/>
     </pattern>
   </defs>
 
-  <rect x="1" y="1" width="898" height="428" rx="14" fill="${PANEL}" stroke="${STROKE}"/>
-  <path d="M1 39h898" stroke="${STROKE}"/>
+  <rect x="1" y="1" width="898" height="428" rx="16" fill="url(#aero)" stroke="${STROKE}"/>
+  <rect x="1" y="40" width="898" height="389" fill="url(#gloss)" opacity="0.55"/>
   <rect x="1" y="40" width="898" height="389" fill="url(#scanlines)" opacity="0.8"/>
+  ${bubbles}
 
-  <circle cx="26" cy="20" r="5" fill="#ff5f56"/>
-  <circle cx="46" cy="20" r="5" fill="#ffbd2e"/>
-  <circle cx="66" cy="20" r="5" fill="#27c93f"/>
+  <path d="M1 39h898" stroke="${STROKE}"/>
+  <circle cx="26" cy="20" r="5" fill="#FF6B7A"/>
+  <circle cx="46" cy="20" r="5" fill="${YELLOW}"/>
+  <circle cx="66" cy="20" r="5" fill="${GREEN}"/>
   <text x="450" y="25" text-anchor="middle" fill="${MUTED}" font-size="12" font-family="${FONT}">stats.sh — ${esc(user.login)}</text>
-  <text x="872" y="25" text-anchor="end" fill="${GREEN}" font-size="10" letter-spacing="1.5" font-family="${FONT}">● LIVE</text>
+  <text x="820" y="25" fill="${GREEN}" font-size="10" letter-spacing="1.5" font-family="${FONT}">● LIVE</text>
 
   ${statsMarkup}
   ${separators}
 
   <path d="M28 148h844" stroke="${STROKE}"/>
   <text x="28" y="174" fill="${MUTED}" font-size="10" letter-spacing="1.4" font-family="${FONT}">TOP LANGUAGES</text>
-  <text x="132" y="174" fill="#4f6a5f" font-size="10" font-family="${FONT}">by bytes</text>
+  <text x="132" y="174" fill="${DIM}" font-size="10" font-family="${FONT}">by bytes</text>
 
   <text x="520" y="174" fill="${MUTED}" font-size="10" letter-spacing="1.4" font-family="${FONT}">CONTRIBUTION SIGNAL / 26W</text>
 
   ${languageMarkup}
   ${heatMarkup}
 
-  <text x="520" y="290" fill="#4f6a5f" font-size="10" font-family="${FONT}">less</text>
+  <text x="520" y="290" fill="${DIM}" font-size="10" font-family="${FONT}">less</text>
   ${legend}
-  <text x="828" y="290" fill="#4f6a5f" font-size="10" font-family="${FONT}">more</text>
+  <text x="828" y="290" fill="${DIM}" font-size="10" font-family="${FONT}">more</text>
 
   <path d="M28 370h844" stroke="${STROKE}"/>
-  <text x="28" y="396" fill="#4f6a5f" font-size="10" font-family="${FONT}">updated ${updated} UTC</text>
-  <text x="720" y="396" fill="#4f6a5f" font-size="10" font-family="${FONT}">generated by stats.yml</text>
+  <text x="28" y="396" fill="${DIM}" font-size="10" font-family="${FONT}">updated ${updated}</text>
+  <text x="720" y="396" fill="${DIM}" font-size="10" font-family="${FONT}">generated by stats.yml</text>
 
-  <rect x="28" y="407" width="7" height="12" fill="${GREEN}" opacity="0.9"/>
-  <text x="43" y="417" fill="#4f6a5f" font-size="10" font-family="${FONT}">no third-party cards. no server. just a scheduled action.</text>
+  <rect x="28" y="407" width="7" height="12" fill="${GREEN}" opacity="0.95"/>
+  <text x="43" y="417" fill="${DIM}" font-size="10" font-family="${FONT}">no third-party cards. no server. just a scheduled action.</text>
 </svg>
 `;
 

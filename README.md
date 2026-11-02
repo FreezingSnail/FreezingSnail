@@ -34,7 +34,7 @@ I make small games, local-first tools, and machines that keep track of themselve
   <img src="assets/stats.svg" alt="GitHub stats for FreezingSnail: contributions, commits, public repositories, followers, top languages, and a 26 week contribution heatmap" width="900">
 </div>
 
-<sub>Generated daily from the GitHub API by [`scripts/stats.mjs`](scripts/stats.mjs) and a scheduled [GitHub Action](.github/workflows/stats.yml). No third-party cards, no server.</sub>
+<sub>Generated daily from the GitHub API by [`scripts/stats.mjs`](scripts/stats.mjs) and a scheduled [GitHub Action](.github/workflows/stats.yml). No third-party cards, no server. Palette: Frutiger Aero.</sub>
 
 ---
 
@@ -43,3 +43,5 @@ I make small games, local-first tools, and machines that keep track of themselve
 `C++` · `Rust` · `Go` · `TypeScript` · `Emacs Lisp` · `Lua` · `Shell`
 
 <sub>Antarctica · [wobpager](https://freezingsnail.github.io/) · [github.com/FreezingSnail](https://github.com/FreezingSnail)</sub>
+
+<sub>Snailware logo © 2023 Freezing Snail, [MIT licensed](assets/LICENSE-AllYourArdu.txt). Palette: my Frutiger Aero Alacritty theme.</sub>
