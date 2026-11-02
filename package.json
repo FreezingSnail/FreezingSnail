@@ -1,0 +1,9 @@
+{
+  "name": "freezingsnail-profile",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "hero": "node scripts/hero.mjs",
+    "stats": "node scripts/stats.mjs"
+  }
+}
