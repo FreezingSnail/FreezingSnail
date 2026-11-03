@@ -82,8 +82,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="320" v
   <text x="250" y="122" fill="${C.text}" font-size="30" font-weight="700" font-family="${FONT}">FreezingSnail</text>
 
   <text x="250" y="158" fill="${C.muted}" font-size="12" font-family="${FONT}">freezing@snail:~$ <tspan fill="${C.green}">cat about.txt</tspan></text>
-  <text x="250" y="184" fill="${C.body}" font-size="14" font-family="${FONT}">small games. local-first tools.</text>
-  <text x="250" y="206" fill="${C.body}" font-size="14" font-family="${FONT}">too many side quests.</text>
+  <text x="250" y="194" fill="${C.body}" font-size="14" font-family="${FONT}">small games. local-first tools.</text>
 
   ${pillMarkup}
 
