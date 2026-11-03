@@ -23,8 +23,6 @@ const pills = [
   ["C++", 46],
   ["Rust", 54],
   ["Go", 42],
-  ["Emacs Lisp", 96],
-  ["Lua", 48],
 ];
 
 let pillX = 250;

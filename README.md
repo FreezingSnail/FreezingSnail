@@ -6,9 +6,10 @@
 
 I make small games, local-first tools, and machines that keep track of themselves. Most of it fits in a terminal, a pocket, or an Arduboy.
 
-- `now` — [maduin](https://github.com/FreezingSnail/maduin) — Emacs-native crew/fleet orchestrator for opencode + DeepSeek
-- `also` — [chaplet](https://github.com/FreezingSnail/chaplet) — magit-style Emacs interface for the `bd` issue tracker
-- `play` — [CreatureGathererFX](https://github.com/FreezingSnail/CreatureGathererFX) / [Maze-Rider](https://github.com/FreezingSnail/Maze-Rider) — Arduboy games
+- `now` — [sub-hauler](https://github.com/FreezingSnail/sub-hauler) — a small, measured Arduboy FX game
+- `build` — [agalma](https://github.com/FreezingSnail/agalma) — always-running Rust software factory
+- `run` — [magicite](https://github.com/FreezingSnail/magicite) — Go agent-runtime daemon
+- `play` — [CreatureGathererFX](https://github.com/FreezingSnail/CreatureGathererFX) — creature-collecting Arduboy demake
 - `notes` — [wobpager](https://freezingsnail.github.io/) — notes from beneath the surface
 
 ---
@@ -18,11 +19,11 @@ I make small games, local-first tools, and machines that keep track of themselve
 | project | what | stack |
 |---|---|---|
 | **[CreatureGathererFX](https://github.com/FreezingSnail/CreatureGathererFX)** | Creature-collecting demake for the Arduboy. | `C++` |
-| **[Maze-Rider](https://github.com/FreezingSnail/Maze-Rider)** | Maze crawler where you hunt for parts of a unicycle. | `C` |
-| **[maduin](https://github.com/FreezingSnail/maduin)** | Emacs-native crew/fleet orchestrator wrapping opencode + DeepSeek. | `Emacs Lisp` |
-| **[chaplet](https://github.com/FreezingSnail/chaplet)** | A magit-style Emacs interface for the `bd` issue tracker. | `Emacs Lisp` |
+| **[sub-hauler](https://github.com/FreezingSnail/sub-hauler)** | Small, measured Arduboy FX game. | `C++` |
 | **[agalma](https://github.com/FreezingSnail/agalma)** | Always-running software factory. | `Rust` |
-| **[mhfu-set-searcher](https://github.com/FreezingSnail/mhfu-set-searcher)** | MHFU armor set solver, builder, and weapon tree search. | `TypeScript` |
+| **[CreatureGathererTools](https://github.com/FreezingSnail/CreatureGathererTools)** | Tooling for the CreatureGathererFX pipeline. | `Rust` |
+| **[magicite](https://github.com/FreezingSnail/magicite)** | Agent-runtime daemon. | `Go` |
+| **[conch](https://github.com/FreezingSnail/conch)** | Autonomous development harness. | `Go` |
 
 <sub>More at [github.com/FreezingSnail?tab=repositories](https://github.com/FreezingSnail?tab=repositories).</sub>
 
@@ -31,17 +32,13 @@ I make small games, local-first tools, and machines that keep track of themselve
 ## `$ ./stats.sh`
 
 <div align="center">
-  <img src="assets/stats.svg" alt="GitHub stats for FreezingSnail: contributions, commits, public repositories, followers, top languages, and a 26 week contribution heatmap" width="900">
+  <img src="assets/stats.svg" alt="GitHub stats for FreezingSnail: contributions, commits, public repositories, followers, C++/Rust/Go stack share, and a 26 week contribution heatmap" width="900">
 </div>
-
-<sub>Generated daily from the GitHub API by [`scripts/stats.mjs`](scripts/stats.mjs) and a scheduled [GitHub Action](.github/workflows/stats.yml). No third-party cards, no server. Palette: Frutiger Aero.</sub>
 
 ---
 
 ## `$ cat ~/.stack`
 
-`C++` · `Rust` · `Go` · `TypeScript` · `Emacs Lisp` · `Lua` · `Shell`
+`C++` · `Rust` · `Go`
 
 <sub>Antarctica · [wobpager](https://freezingsnail.github.io/) · [github.com/FreezingSnail](https://github.com/FreezingSnail)</sub>
-
-<sub>Snailware logo © 2023 Freezing Snail, [MIT licensed](assets/LICENSE-AllYourArdu.txt). Palette: my Frutiger Aero Alacritty theme.</sub>

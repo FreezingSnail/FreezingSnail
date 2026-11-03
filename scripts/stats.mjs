@@ -70,10 +70,11 @@ for (const repo of repos) {
   }
 }
 
-const totalLanguageBytes = [...languageBytes.values()].reduce((sum, item) => sum + item.bytes, 0);
-const topLanguages = [...languageBytes.values()]
-  .sort((a, b) => b.bytes - a.bytes)
-  .slice(0, 5);
+const coreLanguages = ["C++", "Rust", "Go"].map(
+  (name) => languageBytes.get(name) || { name, bytes: 0 },
+);
+const coreBytes = coreLanguages.reduce((sum, item) => sum + item.bytes, 0);
+const topLanguages = coreLanguages;
 
 const weeks = user.contributionsCollection.contributionCalendar.weeks.slice(-26);
 const days = weeks.flatMap((week) => week.contributionDays);
@@ -102,7 +103,6 @@ const GREEN = "#66E6A0";
 const CYAN = "#6DE8F5";
 const BLUE = "#B8EDFF";
 const YELLOW = "#FFE36E";
-const MAGENTA = "#C28CFF";
 const DIM = "#5FA8B8";
 
 const statBlocks = [
@@ -125,13 +125,13 @@ const separators = [227, 438, 649]
   .map((x) => `<path d="M${x} 58v76" stroke="${STROKE}"/>`)
   .join("");
 
-const barColors = [CYAN, GREEN, BLUE, YELLOW, MAGENTA];
+const languageColors = { "C++": CYAN, Rust: GREEN, Go: BLUE };
 const languageMarkup = topLanguages
   .map((language, index) => {
     const y = 198 + index * 27;
-    const percent = totalLanguageBytes ? (language.bytes / totalLanguageBytes) * 100 : 0;
+    const percent = coreBytes ? (language.bytes / coreBytes) * 100 : 0;
     const width = Math.max(2, Math.round((percent / 100) * 300));
-    const color = barColors[index] || CYAN;
+    const color = languageColors[language.name] || CYAN;
     return `<circle cx="31" cy="${y - 4}" r="4" fill="${color}"/>
     <text x="44" y="${y}" fill="${BODY}" font-size="11" font-family="${FONT}">${esc(language.name)}</text>
     <rect x="140" y="${y - 9}" width="300" height="8" rx="2" fill="${BG2}"/>
@@ -210,8 +210,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="430" vi
   ${separators}
 
   <path d="M28 148h844" stroke="${STROKE}"/>
-  <text x="28" y="174" fill="${MUTED}" font-size="10" letter-spacing="1.4" font-family="${FONT}">TOP LANGUAGES</text>
-  <text x="132" y="174" fill="${DIM}" font-size="10" font-family="${FONT}">by bytes</text>
+  <text x="28" y="174" fill="${MUTED}" font-size="10" letter-spacing="1.4" font-family="${FONT}">CORE STACK</text>
+  <text x="132" y="174" fill="${DIM}" font-size="10" font-family="${FONT}">C++ / Rust / Go</text>
 
   <text x="520" y="174" fill="${MUTED}" font-size="10" letter-spacing="1.4" font-family="${FONT}">CONTRIBUTION SIGNAL / 26W</text>
 
